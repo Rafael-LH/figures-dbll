@@ -1,8 +1,8 @@
-import React,{Componet} from 'react';
-import {render} from 'react-dom';
-import App from './App';
+import React, { Componet } from "react";
+import { render } from "react-dom";
+import App from "./App";
 
-render(
-        <App />,
-        document.getElementById('app')
-)
+// assets
+import "./assets/scss/global.scss";
+
+render(<App />, document.getElementById("app"));
