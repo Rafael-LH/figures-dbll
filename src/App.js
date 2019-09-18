@@ -1,6 +1,6 @@
-import React, { Component, Fragment } from "react";
+import React, { Component, Fragment } from 'react';
 
-import "./styleComponent.scss";
+import './styleComponent.scss';
 
 class App extends Component {
   render() {
