@@ -1,7 +1,6 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-
 module.exports = (env) => {
   const typeMode = env.NODE_ENV;
   const isDev = typeMode === 'development';

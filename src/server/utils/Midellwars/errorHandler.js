@@ -29,7 +29,7 @@ const clientError = (err, req, res, nexy) => {
     output: { statusCode, payload }
   } = err;
 
-  if (req.headerSent || req.isXMLHttpRequest()) {
+  if (req.headerSent || isXMLHttpRequest(req)) {
     res.set("Content-Type", "application/json");
     return res.status(statusCode).json(errorWithStack(payload, err.stack));
   }
