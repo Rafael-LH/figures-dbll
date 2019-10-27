@@ -1,20 +1,24 @@
-const path = require('path');
+const { resolve } = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: 'development',
-  entry: path.resolve(__dirname, 'src/index.js'),
+  entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
-    publicPath: '/public/assets/',
+    path: resolve(__dirname, 'dist'),
+    filename: 'js/bundle.js',
   },
   resolve: {
     extensions: ['.js', '.jsx'],
+    alias: {
+      '@components': resolve(__dirname, './src/Components/'),
+      '@assets': resolve(__dirname, './src/assets/'),
+    },
   },
   devtool: 'source-map',
   devServer: {
-    contentBase: path.resolve(__dirname, 'public/'),
-    publicPath: '/',
+    contentBase: resolve(__dirname, 'public/'),
     compress: true,
     port: 9000,
     historyApiFallback: true,
@@ -22,38 +26,48 @@ module.exports = {
   module: {
     rules: [
       {
-        exclude: /(node_modules)/,
-        test: /\.(js|jsx)$/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env', '@babel/preset-react'],
-            plugins: [
-              '@babel/plugin-transform-runtime',
-              '@babel/plugin-proposal-class-properties',
-            ],
-          },
-        },
-      },
-      {
-        test: /\.?scss$/,
+        test: /\.(s*)css/,
         use: [
           'style-loader',
           {
             loader: 'css-loader',
             options: {
               sourceMap: true,
+              importLoaders: 1,
             },
           },
-
           {
-            loader: 'sass-loader',
+            loader: 'postcss-loader',
             options: {
-              sourceMap: true,
+              ident: 'postcss',
             },
           },
         ],
       },
+      {
+        test: /\.(js|jsx)/,
+        exclude: /(node_modules|server)/,
+        use: {
+          loader: 'babel-loader',
+        },
+      },
+      {
+        test: /\.jpg|png|svg$/,
+        use: {
+          loader: 'file-loader',
+          options: {
+            outputPath: 'assets/',
+            name: '[name].[ext]',
+          },
+        },
+      },
     ],
   },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].css',
+      chunkFilename: 'css/[name].[chunkhash].css',
+    }),
+    new HtmlWebpackPlugin({ template: resolve(__dirname, 'public/index.html'), filename: './index.html' }),
+  ],
 };
